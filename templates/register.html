@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="p-4"></div>
+<div class="col-md-5 offset-md-auto mx-auto" style="text-align: center;">
+<h1>Registro</h1>
+<form action="/register" method="POST">
+    <div class="card card-body">
+        <div class="form-group">
+            <input class="form-control" name="name" placeholder="Usuario" required> <br>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="email" required> <br>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Contraseña" required> <br>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            Registarse
+        </button>
+    </div>
+</form>
+<div class=" offset-md-auto mx-auto" style="text-align: center;">
+    <p class="lead">Registarte para unirte a la comunidad TeamSuper8cho</p> 
+    </div>
+{% endblock %}
