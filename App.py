@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL,MySQLdb
 import bcrypt
+import os
+import shutil
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost' 
@@ -9,6 +11,38 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'flaskdb'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
+
+def scrapTheme(theme, max_images):
+
+    try:
+        if os.path.exists(f"D:/scrapped"):
+            flag=True
+        else:
+            os.mkdir(f"D:/scrapped")
+            flag=True
+        if flag:
+            if os.path.exists(f"D:/scrapped/{theme}"):
+                shutil.rmtree(f"D:/scrapped/{theme}")
+            # Crear la carpeta
+           
+            os.mkdir(f"D:/scrapped/{theme}")
+            print("1")
+            os.system(f"instagram-scraper {theme} --maximum {max_images} -d D:/scrapped/{theme} -u benjaminmartincito341 -p supergoku")
+            
+            # Eliminar la foto de perfil
+            
+            directorio = os.listdir(f"D:/scrapped/{theme}")
+            print("3")
+            directorio.sort()
+            #os.remove(f"D:/scrapped/{theme}/{directorio[0]}")
+
+    except:
+        # Si falla
+        print("False")
+        return False
+
+    print("True")
+    return True
 
 @app.route('/')
 def index():
@@ -89,6 +123,11 @@ def gustos():
         print(session['email'])
         return 'Done'
     return render_template('home.html')
+
+@app.route("/scrapper")
+def scrap():
+    scrapTheme("memes_divertidoss_2.0", 3)
+    return "DONE"
 
 if __name__ ==  '__main__':
     app.secret_key = "^A%DJAJU^JJ123"
