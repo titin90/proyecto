@@ -1,9 +1,81 @@
 {% extends "layout.html" %}
 {% block body %}
 <form method="POST" action="/gustos">
-  Checkbox 1<input type="checkbox" value="1" name="mycheckbox">
-  Checkbox 2<input type="checkbox" value="2" name="mycheckbox">
-  Checkbox 3<input type="checkbox" value="3" name="mycheckbox">
-  <input type="submit">
+  <div class="row">
+    <div class="p-4"></div>
+    <div class="card card-body">
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck1" value="1,2,3,4" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck1">Futbol</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck2" value="5,6,7" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck2">Basquetball</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck3" value="8,9" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck3">Voleyball</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck4" value="10,11,12" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck4">Simpsons</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck5" value="13,14" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck5">Valorant</label>
+      </div>
+      <div class="p-1"></div>
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck6" value="15,16,17" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck6">USM</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck7" value="18,19,20" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck7">Perros</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck8" value="21,22,23" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck8">Gatos</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck9" value="24,25.26" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck9">Politica</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck10" value="27,28,29" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck10">LOL</label>
+      </div>
+      <div class="p-1"></div>
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck11" value="30,31" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck11">Fifa</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck12" value="32,33" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck12">Artes</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck13" value="34,35,36,37,38" name="mycheckbox"
+          autocomplete="off">
+        <label class="btn btn-primary" for="btncheck13">Varios</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck14" value="39,40,41" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck14">Frases Motivacionales</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck15" value="42,44" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck15">Minecraft</label>
+      </div>
+      <div class="p-1"></div>
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck16" value="45,47" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck16">Casa de Papel</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck17" value="48,49,50" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck17">Juego del Calamar</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck18" value="51,52,53" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck18">Musica</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck19" value="54,55,56" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck19">Fortnite</label>
+        <div class="p-1"></div>
+        <input type="checkbox" class="btn-check" id="btncheck20" value="57,58,59" name="mycheckbox" autocomplete="off">
+        <label class="btn btn-primary" for="btncheck20">Pokemon</label>
+        <div class="p-1"></div>
+      </div>
+    </div>
+    <div class="p-4"></div>
+    <input class="col-md-5 offset-md-auto mx-auto btn btn-primary" type="submit">
+  </div>
 </form>
 {% endblock %}
