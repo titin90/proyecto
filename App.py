@@ -144,7 +144,6 @@ def scrap():
                     if l[1]==a:
                         scrapTheme(l[0], 3)
         return "DONE"
-
 if __name__ ==  '__main__':
     app.secret_key = "^A%DJAJU^JJ123"
     app.run(port=PORT , debug=DEBUG)
