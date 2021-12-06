@@ -1,1 +1,2 @@
-2021-12-04 00:31:19,897 - instagram_scraper.app - WARNING - No Content-Length in response, the file 263156286_595574514985052_142897201945651040_n.jpg may be partially downloaded
+2021-12-06 19:28:33,398 - instagram_scraper.app - ERROR - Login failed for benjaminmartincito341
+2021-12-06 19:28:33,399 - instagram_scraper.app - ERROR - {"message": "Please wait a few minutes before you try again.", "status": "fail"}
