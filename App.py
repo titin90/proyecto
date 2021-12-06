@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
+from flask.cli import routes_command
 from flask_mysqldb import MySQL,MySQLdb
 import bcrypt
 import os
@@ -15,27 +16,43 @@ app.config['MYSQL_DB'] = 'flaskdb'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
+def listafoto():
+    os.chdir("uploads")
+    listafotos=[]
+    for file in os.listdir():
+        for foto in os.listdir(file):
+            listafotos.append((file,foto))
+    return listafotos
 
-def scrapTheme(theme, max_images):
+
+
+@app.route('/uploads/<carpeta>/<nombreFoto>')
+def uploads(carpeta,nombreFoto):
+    CARPETA=os.path.join("uploads/"+carpeta)
+    app.config["CARPETA"]=CARPETA
+    return send_from_directory(app.config["CARPETA"],nombreFoto)
+
+
+def scrapTheme(theme, max_images, x):
     try:
-        if os.path.exists(f"scrapped"):
+        if os.path.exists(f"uploads"):
             flag=True
         else:
-            os.mkdir(f"scrapped")
+            os.mkdir(f"uploads")
             flag=True
         if flag:
-            if os.path.exists(f"scrapped/{theme}"):
-                shutil.rmtree(f"scrapped/{theme}")
+            if os.path.exists(f"uploads/{theme}"):
+                shutil.rmtree(f"uploads/{theme}")
             # Crear la carpeta
            
-            os.mkdir(f"scrapped/{theme}")
-            os.system(f"instagram-scraper {theme} -m {max_images} -t image -d scrapped/{theme} -u benjaminmartincito341 -p supergoku")
+            os.mkdir(f"uploads/{theme}")
+            os.system(f"instagram-scraper {theme} -m {max_images} -t image -d uploads/{theme} -u benjaminmartincito341 -p supergoku")
             
             # Eliminar la foto de perfil
             
-            directorio = os.listdir(f"scrapped/{theme}")
+            directorio = os.listdir(f"uploads/{theme}")
             directorio.sort()
-            os.remove(f"scrapped/{theme}/{directorio[0]}")
+            os.remove(f"uploads/{theme}/{directorio[0]}")
 
     except:
         # Si falla
@@ -93,11 +110,9 @@ def register():
         email = request.form['email']
         password = request.form['password'].encode('utf-8')
         hash_password = bcrypt.hashpw(password, bcrypt.gensalt())
-
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO users (name, email, password) VALUES (%s,%s,%s)",(name,email,hash_password,))
         mysql.connection.commit()
-        
         session['name'] = request.form['name']
         session['email'] = request.form['email']
         return redirect(url_for('home'))     
@@ -105,6 +120,12 @@ def register():
 @app.route('/perfil')
 def perfil():
     return render_template('perfil.html')
+
+@app.route('/foto', methods=["GET",'POST'])
+def foto():
+    listfoto=scrap()
+    print(listfoto)
+    return render_template('foto.html',listfoto=listfoto)
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
@@ -127,9 +148,18 @@ def gustos():
         return render_template('home.html')
     return render_template('home.html')
 
+@app.route('/likes', methods=['GET', 'POST'])
+def likes():
+    if request.method == 'POST': 
+        likes= request.form.getlist('btnradio')
+        print(likes)
+        return render_template('home.html')
+    return render_template('home.html')
+
 @app.route("/scrapper", methods=['POST'])
 def scrap():
-    lista= (("futboltvmemes","1"),("memes_futboleros_","2"),("outofcontextfutchile._","3"),("outofcontextcolocolo","4"),("nbamemes","5"),("basketball_.meme","6"),("basket_ball_memes","7"),("memesvoleibol","8"),("voleibol_memes","9"),("lossimpsonsmemesok","10"),("memesimpsonok","11"),("https://instagram.com/los.simpson.memes.2.0?utm_medium=copy_link","12"),("https://instagram.com/valorantmomentos?utm_medium=copy_link","13"),("https://instagram.com/memesvalorant.es?utm_medium=copy_link","14"),("https://instagram.com/memes.usm?utm_medium=copy_link","15"),("https://instagram.com/usm3mes?utm_medium=copy_link","16"),("https://instagram.com/usmemes.exe?utm_medium=copy_link","17"),("https://instagram.com/memes_de_perros?utm_medium=copy_link","18"),("https://instagram.com/memes_perros_cl?utm_medium=copy_link","19"),("https://instagram.com/memes_de_perross?utm_medium=copy_link","20"),("https://instagram.com/michis.para.ti?utm_medium=copy_link","21"),("https://instagram.com/memes_de_gatos?utm_medium=copy_link","22"),("https://instagram.com/memes_chistosos_de_gatos?utm_medium=copy_link","23"),("https://instagram.com/outofcontextpoliticoschile?utm_medium=copy_link","24"),("https://instagram.com/esdepoliticos?utm_medium=copy_link","25"),("https://instagram.com/politicalcompass.chile?utm_medium=copy_link","26"),("https://instagram.com/lol.chile?utm_medium=copy_link","27"),("https://instagram.com/leaguemasivo?utm_medium=copy_link","28"),("https://instagram.com/memes_lol.las?utm_medium=copy_link","29"),("https://instagram.com/ayudas.clubes.proo?utm_medium=copy_link","30"),("https://instagram.com/fifa_y_piscolas?utm_medium=copy_link","31"),("https://instagram.com/memes_dearte?utm_medium=copy_link","32"),("https://instagram.com/memesdearteclasico?utm_medium=copy_link","33"),("https://instagram.com/chilelawea?utm_medium=copy_link","34"),("https://instagram.com/memelasdeorizaba?utm_medium=copy_link","35"),("https://instagram.com/cabronazi?utm_medium=copy_link","36"),("https://instagram.com/stamamalon?utm_medium=copy_link","39"),("https://instagram.com/oufits_para_hombres?utm_medium=copy_link","38"),("https://instagram.com/frases_inspiradoras_oficial?utm_medium=copy_link","37"),("https://instagram.com/frases.motivacionales.diarias?utm_medium=copy_link","40"),("https://instagram.com/frasesmotivaciondetodounpoco?utm_medium=copy_link","41"),("https://instagram.com/minecraft_memes.esp?utm_medium=copy_link","42"),("https://instagram.com/minecraftmemeschile?utm_medium=copy_link","43"),("https://instagram.com/memes_minecraft1?utm_medium=copy_link","44"),("https://instagram.com/casadepapelmemes?utm_medium=copy_link","45"),("https://instagram.com/la_casa_de_papel_memess?utm_medium=copy_link","46"),("https://instagram.com/memes.casa.de.papel?utm_medium=copy_link","47"),("https://instagram.com/eljuegodelcalamar.memes?utm_medium=copy_link","48"),("https://instagram.com/el_juego_del_calamar_fans1?utm_medium=copy_link","49"),("https://instagram.com/memes.juego.calamar?utm_medium=copy_link","50"),("https://instagram.com/memesmusicales_?utm_medium=copy_link","51"),("https://instagram.com/aestudiaracasa?utm_medium=copy_link","52"),("https://instagram.com/memesdemusica_?utm_medium=copy_link","53"),("https://instagram.com/fortnitememeschile?utm_medium=copy_link","54"),("https://instagram.com/memes_chile_fortnite?utm_medium=copy_link","55"),("https://instagram.com/memesft_?utm_medium=copy_link","56"),("https://instagram.com/pokecitas?utm_medium=copy_link","57"),("https://instagram.com/pokememes_originales?utm_medium=copy_link","58"),("https://instagram.com/_shiny_posting_?utm_medium=copy_link","59"))
+    lista = (("futboltvmemes","1"),("memes_futboleros_","2"),("outofcontextfutchile._","3"),("outofcontextcolocolo","4"),("nbamemes","5"),("basketball_.meme","6"),("basket_ball_memes","7"),("memesvoleibol","8"),("voleibol_memes","9"),("lossimpsonsmemesok","10"),("memesimpsonok","11"),("los.simpson.memes.2.0","12"),("valorantmomentos","13"),("memesvalorant.es","14"),("memes.usm","15"),("usm3mes","16"),("usmemes.exe","17"),("memes_de_perros","18"),("memes_perros_cl","19"),("memes_de_perross","20"),("michis.para.ti","21"),("memes_de_gatos","22"),("memes_chistosos_de_gatos","23"),("outofcontextpoliticoschile","24"),("esdepoliticos","25"),("politicalcompass.chile","26"),("lol.chile","27"),("leaguemasivo","28"),("memes_lol.las","29"),("ayudas.clubes.prook","30"),("fifa_y_piscolas","31"),("memes_dearte","32"),("memesdearteclasico","33"),("chilelawea","34"),("memelasdeorizaba","35"),("cabronazi","36"),("stamamalon","39"),("oufits_para_hombres","38"),("frases_inspiradoras_oficial?utm_medium=copy_link","37"),("frases.motivacionales.diarias","40"),("frasesmotivaciondetodounpoco","41"),("minecraft_memes.esp","42"),("minecraftmemeschile","43"),("memes_minecraft1","44"),("casadepapelmemes","45"),("la_casa_de_papel_memess","46"),("memes.casa.de.papel","47"),("eljuegodelcalamar.memes","48"),("el_juego_del_calamar_fans1","49"),("memes.juego.calamar","50"),("memesmusicales_","51"),("aestudiaracasa","52"),("memesdemusica_","53"),("fortnitememeschile","54"),("memes_chile_fortnite","55"),("memesft_","56"),("pokecitask","57"),("pokememes_originales","58"),("_shiny_posting_","59"))
+
     if request.method == 'POST':
         email= session["email"]
         curl = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -142,8 +172,9 @@ def scrap():
             for a in s:
                 for l in lista:
                     if l[1]==a:
-                        scrapTheme(l[0], 3)
-        return "DONE"
+                        scrapTheme(l[0], 3,l[1])
+        listfoto=listafoto()
+        return (listfoto)
 if __name__ ==  '__main__':
     app.secret_key = "^A%DJAJU^JJ123"
     app.run(port=PORT , debug=DEBUG)
