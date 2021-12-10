@@ -17,10 +17,9 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 def listafoto():
-    os.chdir("uploads")
     listafotos=[]
-    for file in os.listdir():
-        for foto in os.listdir(file):
+    for file in os.listdir("uploads"):
+        for foto in os.listdir("uploads/"+file):
             listafotos.append((file,foto))
     return listafotos
 
@@ -32,10 +31,16 @@ def uploads(carpeta,nombreFoto):
     app.config["CARPETA"]=CARPETA
     return send_from_directory(app.config["CARPETA"],nombreFoto)
 
+@app.route('/predeterminada/images.png')
+def predeterminada():
+    CARPETA=os.path.join("predeterminada/")
+    app.config["CARPETA"]=CARPETA
+    return send_from_directory(app.config["CARPETA"],"images.png")
+
 
 def scrapTheme(theme, max_images, x):
     try:
-        if os.path.exists(f"uploads"):
+        if os.path.exists("uploads"):
             flag=True
         else:
             os.mkdir(f"uploads")
@@ -46,7 +51,7 @@ def scrapTheme(theme, max_images, x):
             # Crear la carpeta
            
             os.mkdir(f"uploads/{theme}")
-            os.system(f"instagram-scraper {theme} -m {max_images} -t image -d uploads/{theme} -u benjaminmartincito341 -p supergoku")
+            os.system(f"instagram-scraper {theme} -m {max_images} -t image -d uploads/{theme} -u trabajoiwg8@gmail.com -p Holamundo.")
             
             # Eliminar la foto de perfil
             
@@ -56,10 +61,8 @@ def scrapTheme(theme, max_images, x):
 
     except:
         # Si falla
-        print("False")
         return False
 
-    print("True")
     return True
 
 
@@ -116,7 +119,7 @@ def register():
         session['name'] = request.form['name']
         session['email'] = request.form['email']
         return redirect(url_for('home'))     
-
+    
 @app.route('/perfil')
 def perfil():
     return render_template('perfil.html')
@@ -124,7 +127,6 @@ def perfil():
 @app.route('/foto', methods=["GET",'POST'])
 def foto():
     listfoto=scrap()
-    print(listfoto)
     return render_template('foto.html',listfoto=listfoto)
 
 @app.route('/logout', methods=["GET", "POST"])
@@ -138,21 +140,60 @@ def gustos():
         gustos= request.form.getlist('mycheckbox')
         salida=""
         for s in gustos:
-            salida+=s+";"
+            salida+=s+","
         salida=salida[:-1]
         cur = mysql.connection.cursor()
         cur.execute("UPDATE users SET gustos=(%s) WHERE email=(%s) ", (salida,session['email']))
         mysql.connection.commit()
-        print(salida)
-        print(session['email'])
         return render_template('home.html')
     return render_template('home.html')
 
 @app.route('/likes', methods=['GET', 'POST'])
 def likes():
     if request.method == 'POST': 
-        likes= request.form.getlist('btnradio')
-        print(likes)
+        likes= request.form.getlist('mycheckbox')
+        carpeta=""
+        listalikes=[]
+        k=0
+        listafotos=[]
+        promedio=""
+        for file in os.listdir("uploads"):
+            for foto in os.listdir("uploads/"+file):
+                listafotos.append((file,foto))
+        for a in listafotos:
+            if a[0] != carpeta:
+                listalikes.append(promedio)
+                promedio=0
+                carpeta=a[0]
+                promedio+=int(likes[k])
+                k+=1
+            else:
+                promedio+=int(likes[k])
+                k+=1
+        listalikes.append(promedio)
+        del listalikes[0]
+
+        #Update gustos
+
+        email= session["email"]
+        curl = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        curl.execute("SELECT * FROM users WHERE email=%s",(email,))
+        user = curl.fetchone()
+        gustos=user["gustos"].split(",")
+        curl.close()
+        i=len(listalikes)
+        c=0
+        for x in range(i):
+            if listalikes[x]<0:
+                del gustos[x-c]
+                c+=1
+        salida=""
+        for s in gustos:
+            salida+=s+","
+        salida=salida[:-1]
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE users SET gustos=(%s) WHERE email=(%s) ", (salida,session['email']))
+        mysql.connection.commit()
         return render_template('home.html')
     return render_template('home.html')
 
@@ -165,14 +206,15 @@ def scrap():
         curl = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         curl.execute("SELECT * FROM users WHERE email=%s",(email,))
         user = curl.fetchone()
-        gustos=user["gustos"].split(";")
+        gustos=user["gustos"].split(",")
         curl.close()
-        for categoria in gustos:
-            s = categoria.split(",")
-            for a in s:
-                for l in lista:
-                    if l[1]==a:
-                        scrapTheme(l[0], 3,l[1])
+        if os.path.exists("uploads"):
+            shutil.rmtree("uploads")
+            os.mkdir(f"uploads")
+        for s in gustos:
+            for l in lista:
+                if l[1]==s:
+                    scrapTheme(l[0], 3,l[1])
         listfoto=listafoto()
         return (listfoto)
 if __name__ ==  '__main__':
