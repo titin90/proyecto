@@ -46,18 +46,18 @@ def scrapTheme(theme, max_images, x):
             os.mkdir(f"uploads")
             flag=True
         if flag:
-            if os.path.exists(f"uploads/{theme}"):
-                shutil.rmtree(f"uploads/{theme}")
+            if os.path.exists(f"uploads/{x}"):
+                shutil.rmtree(f"uploads/{x}")
             # Crear la carpeta
            
-            os.mkdir(f"uploads/{theme}")
-            os.system(f"instagram-scraper {theme} -m {max_images} -t image -d uploads/{theme} -u trabajoiwg8@gmail.com -p Holamundo.")
+            os.mkdir(f"uploads/{x}")
+            os.system(f"instagram-scraper {theme} -m {max_images} -t image -d uploads/{x} -u trabajoiwg8@gmail.com -p Holamundo.")
             
             # Eliminar la foto de perfil
             
-            directorio = os.listdir(f"uploads/{theme}")
+            directorio = os.listdir(f"uploads/{x}")
             directorio.sort()
-            os.remove(f"uploads/{theme}/{directorio[0]}")
+            os.remove(f"uploads/{x}/{directorio[0]}")
 
     except:
         # Si falla
@@ -183,10 +183,13 @@ def likes():
         curl.close()
         i=len(listalikes)
         c=0
+        print(listalikes)
+        print(gustos)
         for x in range(i):
             if listalikes[x]<0:
                 del gustos[x-c]
                 c+=1
+        print(gustos)
         salida=""
         for s in gustos:
             salida+=s+","
@@ -199,7 +202,7 @@ def likes():
 
 @app.route("/scrapper", methods=['POST'])
 def scrap():
-    lista = (("futboltvmemes","1"),("memes_futboleros_","2"),("outofcontextfutchile._","3"),("outofcontextcolocolo","4"),("nbamemes","5"),("basketball_.meme","6"),("basket_ball_memes","7"),("memesvoleibol","8"),("voleibol_memes","9"),("lossimpsonsmemesok","10"),("memesimpsonok","11"),("los.simpson.memes.2.0","12"),("valorantmomentos","13"),("memesvalorant.es","14"),("memes.usm","15"),("usm3mes","16"),("usmemes.exe","17"),("memes_de_perros","18"),("memes_perros_cl","19"),("memes_de_perross","20"),("michis.para.ti","21"),("memes_de_gatos","22"),("memes_chistosos_de_gatos","23"),("outofcontextpoliticoschile","24"),("esdepoliticos","25"),("politicalcompass.chile","26"),("lol.chile","27"),("leaguemasivo","28"),("memes_lol.las","29"),("ayudas.clubes.prook","30"),("fifa_y_piscolas","31"),("memes_dearte","32"),("memesdearteclasico","33"),("chilelawea","34"),("memelasdeorizaba","35"),("cabronazi","36"),("stamamalon","39"),("oufits_para_hombres","38"),("frases_inspiradoras_oficial?utm_medium=copy_link","37"),("frases.motivacionales.diarias","40"),("frasesmotivaciondetodounpoco","41"),("minecraft_memes.esp","42"),("minecraftmemeschile","43"),("memes_minecraft1","44"),("casadepapelmemes","45"),("la_casa_de_papel_memess","46"),("memes.casa.de.papel","47"),("eljuegodelcalamar.memes","48"),("el_juego_del_calamar_fans1","49"),("memes.juego.calamar","50"),("memesmusicales_","51"),("aestudiaracasa","52"),("memesdemusica_","53"),("fortnitememeschile","54"),("memes_chile_fortnite","55"),("memesft_","56"),("pokecitask","57"),("pokememes_originales","58"),("_shiny_posting_","59"))
+    lista = (("futboltvmemes","1"),("memes_futboleros_","2"),("outofcontextfutchile._","3"),("outofcontextcolocolo","4"),("nbamemes","5"),("basketball_.meme","6"),("basket_ball_memes","7"),("memesvoleibol","8"),("voleibol_memes","9"),("lossimpsonsmemesok","10"),("memesimpsonok","11"),("los.simpson.memes.2.0","12"),("valorantmomentos","13"),("memesvalorant.es","14"),("memes.usm","15"),("usm3mes","16"),("usmemes.exe","17"),("memes_de_perros","18"),("memes_perros_cl","19"),("memes_de_perross","20"),("michis.para.ti","21"),("memes_de_gatos","22"),("memes_chistosos_de_gatos","23"),("outofcontextpoliticoschile","24"),("esdepoliticos","25"),("politicalcompass.chile","26"),("lol.chile","27"),("leaguemasivo","28"),("memes_lol.las","29"),("ayudas.clubes.prook","30"),("fifa_y_piscolas","31"),("memes_dearte","32"),("memesdearteclasico","33"),("chilelawea","34"),("memelasdeorizaba","35"),("cabronazi","36"),("stamamalon","39"),("oufits_para_hombres","38"),("frases_inspiradoras_oficial","37"),("frases.motivacionales.diarias","40"),("frasesmotivaciondetodounpoco","41"),("minecraft_memes.esp","42"),("minecraftmemeschile","43"),("memes_minecraft1","44"),("casadepapelmemes","45"),("la_casa_de_papel_memess","46"),("memes.casa.de.papel","47"),("eljuegodelcalamar.memes","48"),("el_juego_del_calamar_fans1","49"),("memes.juego.calamar","50"),("memesmusicales_","51"),("aestudiaracasa","52"),("memesdemusica_","53"),("fortnitememeschile","54"),("memes_chile_fortnite","55"),("memesft_","56"),("pokecitask","57"),("pokememes_originales","58"),("_shiny_posting_","59"))
 
     if request.method == 'POST':
         email= session["email"]
