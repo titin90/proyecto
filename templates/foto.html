@@ -6,11 +6,21 @@
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active" data-bs-interval="10000">
-                    <img class="d-block mx-auto" src="/uploads/futboltvmemes/carnet.jpg" width="500" class="rounded">
+                    <img class="d-block mx-auto" src="/predeterminada/images.png" width="500" class="rounded">
                 </div>
                 {% for l in listfoto %}
                 <div class="carousel-item" data-bs-interval="10000">
                     <img class="d-block mx-auto" data-bs-interval="10000" width="500" src="/uploads/{{l[0]}}/{{l[1]}}">
+                    <div class="col-md-5 offset-md-auto mx-auto" style="text-align: center;">
+                        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                            <input type="checkbox" class="btn-check" id="btncheck1{{l[1]}}" value="1" name="mycheckbox"
+                                autocomplete="off">
+                            <label class="btn btn-success" for="btncheck1{{l[1]}}">LIKE</label>
+                            <input type="checkbox" class="btn-check" id="btncheck2{{l[1]}}" value="-1" name="mycheckbox"
+                                autocomplete="off">
+                            <label class="btn btn-primary" for="btncheck2{{l[1]}}">DISLIKE</label>
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
@@ -25,14 +35,10 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="1" autocomplete="off" checked="">
-            <label class="btn btn-outline-success" for="btnradio1">Like</label>
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="-1" autocomplete="off" checked="">
-            <label class="btn btn-outline-primary" for="btnradio2">Dislikee</label>
-          </div>
     </div>
-    <input style="text-align: center;" class="col-md-5 offset-md-auto mx-auto btn btn-light" type="submit">
+    <div class="col-md-5 offset-md-auto mx-auto" style="text-align: center;">
+        <input style="text-align: center;" class="col-md-5 offset-md-auto mx-auto btn btn-light" type="submit">
+    </div>
 </form>
 
 
